@@ -1,17 +1,15 @@
 package com.slb.service.email;
 
-import java.util.List;
-import java.util.Properties;
+import static java.util.Locale.ENGLISH;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring6.SpringTemplateEngine;
 
+import jakarta.mail.MessagingException;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,33 +21,35 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class EmailSender {
 
+	private final SpringTemplateEngine templateEngine;
 	private final JavaMailSender javaMailSender;
 	
 	private String from;
 	private List<String> cc;
 	private List<String> bcc;
 	
-	public void sendEmail(List<String> recipients,String subject) {
+	public void sendEmail(List<String> recipients,String subject,String template) {
 		
 		try {
 			
-		String[] receiverToList = recipients.toArray(new String[0]);
+	
+		
+		var message = javaMailSender.createMimeMessage();
+	   	String[] receiverToList = recipients.toArray(new String[0]);
 		String[] receiverCcList = cc.toArray(new String[0]);
 		String[] receiverBccList = bcc.toArray(new String[0]);
+		var html = templateEngine.process(template, new Context(ENGLISH));
 		
-		Properties properties=new Properties();  
-		//fill all the information like host name etc.  
-		Session session=Session.getDefaultInstance(properties,null); 
-		
-		  MimeMessage message = new MimeMessage(session);  
-	         message.setFrom(new InternetAddress(from));  
-	         message.addRecipient(Message.RecipientType.TO,new InternetAddress("bindishaparmar01@gmail.com"));  
-	         message.setSubject("Ping");  
-	         message.setText("Hello, this is example of sending email  ");  
-	  
-	         // Send message  
-	         Transport.send(message);  
-	         System.out.println("message sent successfully....");  			
+		var email = new MimeMessageHelper(message, true);
+		email.setFrom(from);
+		email.setTo(receiverToList);
+		email.setCc(receiverCcList);
+		email.setBcc(receiverBccList);
+		email.setSubject(subject);
+		email.setText(html,true);
+			
+		javaMailSender.send(message);
+			
 		} catch (MessagingException e) {
 			throw new EmailServiceException("Error while sending mail",e);
 		}

@@ -28,7 +28,7 @@ public class EmailApiController {
 	public ResponseEntity<ResponseMessage> getData(){
 		
 		
-		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"), "TestMail");
+		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"),"TestMail", "text/sample.txt");
 		
 		ResponseMessage message = new ResponseMessage();
 		message.setEmailAdress("bindisha@gmail.com");
@@ -43,7 +43,7 @@ public class EmailApiController {
 	@PostMapping("/sendmail")
 	public ResponseEntity<ResponseMessage> getDetails(@RequestBody Payload payload){
 		
-		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"), "TestMail");
+		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"),"TestMail", "text/sample.txt");
 		
 		ResponseMessage message = new ResponseMessage("bindisha@gmail.com", "Downloading Please wait", Instant.now(), "SLB");
 		return new ResponseEntity<>(message, HttpStatus.OK);
