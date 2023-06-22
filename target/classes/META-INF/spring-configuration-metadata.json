@@ -1,0 +1,11 @@
+{
+  "groups": [
+    {
+      "name": "email.details",
+      "type": "com.slb.service.email.EmailConfig",
+      "sourceType": "com.slb.service.email.EmailConfig"
+    }
+  ],
+  "properties": [],
+  "hints": []
+}
