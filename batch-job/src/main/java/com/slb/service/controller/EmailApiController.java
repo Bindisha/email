@@ -1,8 +1,7 @@
 package com.slb.service.controller;
 
-import java.time.Instant;
-import java.util.Arrays;
-
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,41 +10,30 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.slb.service.email.EmailSender;
 import com.slb.service.model.Payload;
 import com.slb.service.model.ResponseMessage;
-
-import lombok.RequiredArgsConstructor;
+import com.slb.service.servImpl.EmailService;
 
 @RestController
 @RequestMapping("/api/v1")
-@RequiredArgsConstructor
 public class EmailApiController {
 	
-	private final EmailSender emailSender;
-
+	@Autowired
+	private EmailService emailService;
+	
+	@Value("${email.msg}")
+	private String msg;
+	
 	@GetMapping("/sendmail")
 	public ResponseEntity<ResponseMessage> getData(){
-		
-		
-		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"),"TestMail", "text/sample.txt");
-		
-		ResponseMessage message = new ResponseMessage();
-		message.setEmailAdress("bindisha@gmail.com");
-		message.setMailSentOn(Instant.now());
-		message.setMailSentTo("SLB");
-		message.setMessage("Downloading Please wait");
-		
+		ResponseMessage message = emailService.sendEmail(null,msg,"html/emailTemplate.html");
 		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
-	
+
 	
 	@PostMapping("/sendmail")
 	public ResponseEntity<ResponseMessage> getDetails(@RequestBody Payload payload){
-		
-		emailSender.sendEmail(Arrays.asList("bindishaparmar01@gmail.com"),"TestMail", "text/sample.txt");
-		
-		ResponseMessage message = new ResponseMessage("bindisha@gmail.com", "Downloading Please wait", Instant.now(), "SLB");
+		ResponseMessage message = emailService.sendEmail(null,msg, "html/emailTemplate.html");
 		return new ResponseEntity<>(message, HttpStatus.OK);
 	}
 }

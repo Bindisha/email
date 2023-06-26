@@ -22,8 +22,10 @@ spring:
    
 email:
    from: blessedbins007@gmail.com
+   to: bindishaparmar01@gmail.com
    cc: bindishaparmar01@gmail.com
    bcc: bindishaparmar01@gmail.com
+   msg: "RE: Email Configuration"
    
 jasypt:
   encryptor:

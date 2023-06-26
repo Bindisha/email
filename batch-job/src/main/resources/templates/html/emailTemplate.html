@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+  <head>
+    <title th:remove="all">SLB</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <style>
+    	.highLight{
+			font-weight: bolder;
+         }
+         table,th,td{
+			text-align: center;
+			border: 1px solid black;
+			border-collapse:collapse
+         }
+    </style>
+    
+  </head>
+  <body style="background-color: aqua;">
+  
+  <text>
+    Dear <span th:text="${vendor}">User</span>,
+  </text>  
+  
+  <p>
+  This is sample <span class="highLight" th:text="${emailAdress}">detail. </span>
+ </p>	
+
+ 
+ <table style="width: 100%;">
+ <tr>
+ <th> Title</th>
+ <td><span class="highLight" th:text="${emailAdress}"> title</span></td>
+ </tr>
+ 
+ </table>
+ 
+<p>
+Thank you for your continued support.
+</p>
+Regards,
+
+  </body>
+</html>

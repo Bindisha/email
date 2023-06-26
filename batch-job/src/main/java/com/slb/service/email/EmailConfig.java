@@ -16,7 +16,7 @@ import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
 import org.thymeleaf.templateresolver.ITemplateResolver;
 
 @Configuration
-@ConfigurationProperties(prefix = "email.details")
+@ConfigurationProperties(prefix = "email")
 public class EmailConfig {
 
 	@Value("${email.from}")
@@ -25,6 +25,9 @@ public class EmailConfig {
 	private List<String> cc;
 	@Value("${email.bcc}")
 	private List<String> bcc;
+	@Value("${email.to}")
+	private List<String> to;
+	
 	
 	@Bean
 	EmailSender emailSender(JavaMailSender javaMailSender, SpringTemplateEngine templateEngine) {
@@ -32,6 +35,7 @@ public class EmailConfig {
 		emailSender.setFrom(from);
 		emailSender.setCc(cc);
 		emailSender.setBcc(bcc);
+		emailSender.setTo(to);
 		return emailSender;
 	}
 	
@@ -54,9 +58,9 @@ public class EmailConfig {
 	private ITemplateResolver textTemplateResolver() {
         final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
         templateResolver.setOrder(Integer.valueOf(1));
-        templateResolver.setResolvablePatterns(Collections.singleton("text/*"));
+        templateResolver.setResolvablePatterns(Collections.singleton("html/*"));
         templateResolver.setPrefix("/templates/");
-        templateResolver.setSuffix(".txt");
+        templateResolver.setSuffix(".html");
         templateResolver.setTemplateMode(TemplateMode.TEXT);
         templateResolver.setCharacterEncoding(StandardCharsets.UTF_8.name());
         templateResolver.setCacheable(false);

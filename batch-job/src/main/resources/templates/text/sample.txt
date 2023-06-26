@@ -1,4 +1,4 @@
-Dear User
+Dear User,
 
 This is a Testing mail
 

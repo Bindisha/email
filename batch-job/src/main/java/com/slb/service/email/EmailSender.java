@@ -4,6 +4,7 @@ import static java.util.Locale.ENGLISH;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.context.Context;
@@ -27,17 +28,17 @@ public class EmailSender {
 	private String from;
 	private List<String> cc;
 	private List<String> bcc;
+	private List<String> to;
+	private String msg;
 	
-	public void sendEmail(List<String> recipients,String subject,String template) {
-		
+	public void sendEmail(List<String> recipients,String subject,String template) 
+	{
 		try {
-			
-	
-		
 		var message = javaMailSender.createMimeMessage();
-	   	String[] receiverToList = recipients.toArray(new String[0]);
+	   	//String[] receiverToList = recipients.toArray(new String[0]);
 		String[] receiverCcList = cc.toArray(new String[0]);
 		String[] receiverBccList = bcc.toArray(new String[0]);
+		String[] receiverToList = to.toArray(new String[0]);
 		var html = templateEngine.process(template, new Context(ENGLISH));
 		
 		var email = new MimeMessageHelper(message, true);
@@ -45,7 +46,7 @@ public class EmailSender {
 		email.setTo(receiverToList);
 		email.setCc(receiverCcList);
 		email.setBcc(receiverBccList);
-		email.setSubject(subject);
+		email.setSubject(msg);
 		email.setText(html,true);
 			
 		javaMailSender.send(message);
